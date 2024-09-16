@@ -8,52 +8,57 @@ To write a program to implement the the Logistic Regression Model to Predict the
 2. Anaconda – Python 3.7 Installation / Jupyter notebook
 
 ## Algorithm
-1. Import the Standard Libraries
-2. Set Variables for Assigning Dataset Values
-3. Import Logistic Regression from sklearn
-4. Assign the Points for Representing in the Graph
-5. Predict the Placement Status by Using the Logistic Regression Model
-6. Compare the Graphs and Evaluate the Model's Performance
+step 1. Import the required packages and print the present data.
+step 2. Find the null and duplicate values. 
+step 3. Using logistic regression find the predicted values of accuracy , confusion matrices. 
+step 4. Display the results.
 
 ## Program:
 ```
 Program to implement the the Logistic Regression Model to Predict the Placement Status of Student.
 Developed by: Rohith T
 RegisterNumber: 212223040173
-
-import numpy as np
-from sklearn.datasets import fetch_california_housing
-from sklearn.linear_model import SGDRegressor
-from sklearn.multioutput import MultiOutputRegressor
+import pandas as pd
+data = pd.read_csv("C:/Users/admin/Desktop/ML/Placement_Data.csv")
+print(data.head())
+data1=data1.drop(["sl_no","salary"],axis=1)
+data1.head()
+data1.isnull()
+data1.duplicated().sum()
+from sklearn.preprocessing import LabelEncoder
+le=LabelEncoder()
+data1["gender"]=le.fit_transform(data1["gender"])
+data1["ssc_b"]=le.fit_transform(data1["ssc_b"])
+data1["hsc_b"]=le.fit_transform(data1["hsc_b"])
+data1["hsc_s"]=le.fit_transform(data1["hsc_s"])
+data1["degree_t"]=le.fit_transform(data1["degree_t"])
+data1["workex"]=le.fit_transform(data1["workex"])
+data1["specialisation"]=le.fit_transform(data1["specialisation"])
+data1["status"]=le.fit_transform(data1["status"])
+data1
+x=data1.iloc[:,:-1]
+x
+y=data1["status"]
+y
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error
-from sklearn.preprocessing import StandardScaler
-data = fetch_california_housing()
-x= data.data[:, :3]
-y= np.column_stack((data.target, data.data[:, 6]))
-x_train,x_test,y_train,y_test= train_test_split(x,y, test_size=0.2,random_state=42)
-scaler_x= StandardScaler()
-scaler_y= StandardScaler()
-x_train= scaler_x.fit_transform(x_train)
-x_test= scaler_x.transform(x_test)
-y_train= scaler_y.fit_transform(y_train)
-y_test= scaler_y.transform(y_test)
-sgd= SGDRegressor(max_iter=1000, tol=1e-3)
-multi_output_sgd= MultiOutputRegressor(sgd)
-multi_output_sgd.fit(x_train,y_train)
-y_pred= multi_output_sgd.predict(x_test)
-y_pred= scaler_y.inverse_transform(y_pred)
-y_test= scaler_y.inverse_transform(y_test)
-mse= mean_squared_error(y_test,y_pred)
-print("Mean squared error:",mse)
-print("\npredicition\n",y_pred[:5])
-
+x_train, x_test, y_train, y_test = train_test_split(x,y,test_size = 0.2, random_state = 0)
+from sklearn.linear_model import LogisticRegression
+lr =LogisticRegression(solver ="liblinear")
+lr.fit(x_train,y_train)
+ypred=lr.predict(x_test)
+ypred
+from sklearn.metrics import accuracy_score, classification_report
+accuracy= accuracy_score(y_test, ypred)
+accuracy
+classification_report1= classification_report(y_test, ypred)
+print(classification_report1)
+lr.predict([[1,80,1,90,1,1,90,1,0,85,1,85]])
 ```
 
 ## Output:
-![Screenshot 2024-09-02 111855](https://github.com/user-attachments/assets/876f574b-7d16-49ba-b46a-d37539b73dae)
-
-
+![Screenshot 2024-09-16 103700](https://github.com/user-attachments/assets/e38a747e-b7ec-4ed2-b79e-ea3c430ce947)
+![Screenshot 2024-09-16 103530](https://github.com/user-attachments/assets/f7695986-f3f4-4f10-819b-e2c4a395b3a4)
+![Screenshot 2024-09-16 103520](https://github.com/user-attachments/assets/aca43fa9-7d15-4ce4-9a44-7e6e8865472b)
 
 ## Result:
 Thus the program to implement the the Logistic Regression Model to Predict the Placement Status of Student is written and verified using python programming.
